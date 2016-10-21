@@ -50,7 +50,7 @@ class jsonObject:
     
     line_end = ";"
     
-    base_class = "NSObject"
+    base_class = "XYModelBase"
     
     inherit_operator = " : "
     
@@ -78,6 +78,7 @@ class jsonObject:
     def writeHeader2File(self):
     
         text_file = open(self.file_name + ".h", "w")
+        text_file.write("\n#import <Foundation/Foundation.h>\n\n")
         for  k in self.class_define_array:
             text_file.write(k)
         text_file.close()
@@ -85,6 +86,7 @@ class jsonObject:
     def writeImpl2File(self):
 
         text_file = open(self.file_name + ".m", "w")
+        text_file.write("\n#import\"" + self.file_name + ".h\"\n\n")
         for k in self.class_implementation_array:
             text_file.write(k)
         text_file.close()
@@ -147,7 +149,7 @@ class jsonObject:
         self.class_implementation_array.append(class_implemtion_head_string)
 
         if len(class_modelCustomPropertyMapper_string) != 0:
-            self.class_implementation_array.append("+ (NSDictionary *)modelCustomPropertyMapper{ \n\treturn @{\n")
+            self.class_implementation_array.append("+ (NSDictionary *)modelContainerPropertyGenericClass{ \n\treturn @{\n")
             self.class_implementation_array.append(class_modelCustomPropertyMapper_string)
             self.class_implementation_array.append("\t};\n}")
 
@@ -155,5 +157,6 @@ class jsonObject:
         self.class_implementation_array.append(class_implemtion_end_string)
 
 
-object = jsonObject("testing.txt","model")
+#object = jsonObject("testing.txt","model")
+object = jsonObject(sys.argv[1],sys.argv[2])
 object.write2File();
