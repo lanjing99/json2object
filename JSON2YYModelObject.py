@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 import sys
-import os
 
 class jsonObject:
     
@@ -47,11 +46,11 @@ class jsonObject:
     
     pointer = "*"
     
-    class_seperator = ""  #"_"
+    class_seperator = "_"
     
     line_end = ";"
     
-    base_class = "XYModelBase"
+    base_class = "NSObject"
     
     inherit_operator = " : "
     
@@ -87,7 +86,7 @@ class jsonObject:
     def writeImpl2File(self):
 
         text_file = open(self.file_name + ".m", "w")
-        text_file.write("\n#import\"" + os.path.basename(self.file_name) + ".h\"\n\n")
+        text_file.write("\n#import\"" + self.file_name + ".h\"\n\n")
         for k in self.class_implementation_array:
             text_file.write(k)
         text_file.close()
@@ -118,7 +117,7 @@ class jsonObject:
             elif isinstance(v,basestring) :
                 class_define_string += self.new_line + self.object_prefix + self.string_prefix + self.pointer + k+ self.line_end
             elif isinstance(v,dict):
-                class_name = class_name + self.class_seperator + k.capitalize()
+                class_name = class_name + self.class_seperator + k
                 class_define_string += self.new_line + self.object_prefix + class_name + " " + self.pointer + k + self.line_end
                 self.parseJson(v,class_name,False)
             elif isinstance(v,list) or isinstance(v,tuple) :
@@ -137,7 +136,7 @@ class jsonObject:
                 elif isinstance(value,basestring):
                     class_define_string += self.new_line + self.object_prefix + "NSArray <NSString *> * " + k + self.line_end
                 else:
-                    class_name = class_name + self.class_seperator + k.capitalize()
+                    class_name = class_name + self.class_seperator + k
                     class_define_string += self.new_line + self.object_prefix + "NSArray <" + class_name + " " + self.pointer + "> " + self.pointer + k + self.line_end
                     class_modelCustomPropertyMapper_string += "\t\t\t" + "@\"" + k + "\" : " + class_name + ".class," + self.new_line
                     self.parseJson(value,class_name,True)
